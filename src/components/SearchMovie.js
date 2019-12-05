@@ -12,7 +12,7 @@ const SearchMovie = ()=>{
 
     const handleSubmit = e =>{
         e.preventDefault()
-        axios.get('http://www.omdbapi.com/?s='+movie+'&apikey=95632709')
+        axios.get('http://www.omdbapi.com/?s='+movie+'&apikey=Replace with the api key')
              .then(response => {
                 setSerchMovies(response.data.Search)
              })
@@ -20,7 +20,7 @@ const SearchMovie = ()=>{
 
     }
     const onDetails = id =>{
-        axios.get('http://www.omdbapi.com/?i='+id+'&apikey=95632709')
+        axios.get('http://www.omdbapi.com/?i='+id+'&apikey=Replace with the api key')
         .then(response =>{
             setModal(!modal);
             setMovieDetails(response.data)     
