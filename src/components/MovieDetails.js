@@ -1,43 +1,54 @@
-import React, {useState} from 'react'
-import { Button,Col,Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import React, {useState,useEffect} from 'react'
+import { Card, CardImg,CardBody,CardTitle,Container,CardText, Label} from 'reactstrap';
+import axios from 'axios'
+import { useParams} from "react-router";
 
-const MovieDetails = (props, {onDetails})=>{
-    const {
-        details,
-        modal,
-        className
-      } = props;
-    const {Plot,Year,Rated,Released,Runtime,Genre,Director,Writer,Title} = details
+const MovieDetails = ()=>{
+    let { id } = useParams();
+    const [details, setMovieDetails]= useState({})
 
-    const [modal_state, setModalState] = useState(modal);
-
-    const toggle = () => setModalState(!modal);
+    useEffect(()=>{
+        axios.get('http://www.omdbapi.com/?i='+id+'&apikey=95632709')
+        .then(response =>{
+            setMovieDetails(response.data)   
+            console.log(response.data)  
+        })
+        .catch(error =>{
+            console.log(error)
+        })
+    })
+    const {Title,Year,Rated,Runtime,Released,Director,Writer,Actors,Plot,Poster,Type,Awards,Country, Language} = details
     
     return (
             <div>
-                <Modal isOpen={modal} toggle={onDetails} className={className}>
-                <ModalHeader toggle={onDetails}>{Title}</ModalHeader>
-                <ModalBody>
-                     <Col>
-                        <div>
-                            <p> {Plot}</p>
-                            <p> {Year}</p>
-                            <p> {Rated}</p>
-                            <p> {Released}</p>
-                            <p> {Runtime}</p>
-                            <p> {Genre}</p>
-                            <p> {Director}</p>
-                            <p> {Writer}</p>
-                        </div> 
-                     </Col>
-                   
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={toggle}>OK</Button>{' '}
-                    <Button color="secondary" onClick={toggle}>Cancel</Button>
-                </ModalFooter>
-             </Modal>
+                <Container>
+                <Card body outline color="success" >
+                                <CardImg top width="80%" src={Poster} alt="Card image cap" />
+                                <CardBody>
+                                <CardTitle >{Title}</CardTitle>
+                                <CardText>
+                                    <div>
+                                    {Plot}
+                                    </div>
+                                    <div>
+                                      <label>Year : </label>  {Year}
+                                    </div>
+                                    <div>
+                                      <label style={label_style}>Released : </label>  {Released}
+                                    </div>
+                                </CardText>   
+                                </CardBody>
+                            </Card>
+                </Container>
+     
             </div>
         )
 }
 export default MovieDetails
+
+
+
+const label_style = {
+    color: "#000"
+  };
+  

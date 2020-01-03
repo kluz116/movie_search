@@ -1,33 +1,21 @@
 import React , {useState} from 'react'
 import { Card, CardImg,CardBody,CardTitle,Container,Row,Col,CardColumns ,Button, Form, FormGroup,  Input} from 'reactstrap';
 import axios from 'axios'
-import MovieDetails from './MovieDetails'
+import { Link } from 'react-router-dom'; 
+
 
 const SearchMovie = ()=>{
     const [movie, setMovie] = useState('')
     const [search, setSerchMovies] = useState([])
-    const [details, setMovieDetails]= useState({})
-    const [modal, setModal] = useState(false);
-
-
+  
     const handleSubmit = e =>{
         e.preventDefault()
-        axios.get('http://www.omdbapi.com/?s='+movie+'&apikey=Replace with the api key')
+        axios.get('http://www.omdbapi.com/?s='+movie+'&apikey=95632709')
              .then(response => {
                 setSerchMovies(response.data.Search)
+                console.log(`Try this out${response.data}`)
              })
              .catch(error => {console.log(error)})
-
-    }
-    const onDetails = id =>{
-        axios.get('http://www.omdbapi.com/?i='+id+'&apikey=Replace with the api key')
-        .then(response =>{
-            setModal(!modal);
-            setMovieDetails(response.data)     
-        })
-        .catch(error =>{
-            console.log(error)
-        })
     }
     return(
         <Container>
@@ -50,7 +38,7 @@ const SearchMovie = ()=>{
                                 <CardImg top width="100%" src={item.Poster} alt="Card image cap" />
                                 <CardBody>
                                 <CardTitle key={index}>{item.Title}</CardTitle>
-                                <Button outline color="success" size="sm" onClick={onDetails.bind(this,item.imdbID)}  >View Details</Button>
+                                <Link to={"/MovieDetails/"+item.imdbID} className="btn btn-success outline  btn-sm " >View Details</Link>
                                 </CardBody>
                             </Card>
      
@@ -58,8 +46,7 @@ const SearchMovie = ()=>{
              </CardColumns>
              </Col>
         </Row>
-        <MovieDetails modal = {modal} details ={details} onDetails = {onDetails}/>    
-                           
+        
         </Container>
     )
 }
